@@ -2,21 +2,91 @@ int x = 100;
 int y= 300 ;
 int bv = 50;
 int bg = 3;
-void draw(){
-  background(#00E3FF);
-fill(#00FF39);
-stroke (#00FF39);
-ellipse(x, y, 50, 50);
+int rx =300;
+int pw = 50 ;
+int upperPipeHeight = (int) random(100, 400);
+int pipegap= 250;
+int rtx= 450;
+int lowerY = upperPipeHeight + pipegap;
+int score = 0;
+PImage back;
+PImage pipeBottom;
+PImage pipeTop;
+PImage bird;
+void draw() {
+
+  background(back);
+
+  fill(#00FF39);
+  stroke (#00FF39);
+
+
+  image( bird, x, y);
   y= y+bg;
   fill(#1F7E0A);
-rect(300,0,  50, 250);
-  
-}
-void setup(){
-  size(600, 600);
-  
-}
-void mousePressed(){
-y= y-bv;
+  image (pipeTop,rx,0);
 
+  rx=rx-5;
+  teleportness();
+
+  image(pipeBottom,rtx, lowerY );
+
+  rtx=rtx-5;
+  teleportness();
+  boolean die=die();
+
+
+
+  boolean c = intersectsPipes();
+  if (c||die ) {
+
+    noLoop();
+  }
+  
+  
+  
+  fill(#FFFFFF);
+  textSize(17);
+  text("Score "+ score, 400,50 );
+}
+void setup() {
+  size(500, 750);
+  back = loadImage("flappyBackground.jpg");
+  pipeBottom = loadImage("bottomPipe.png");
+  pipeTop = loadImage("topPipe.png");
+  bird = loadImage("bird.png");
+  bird.resize(50, 50);
+}
+void mousePressed() {
+  y= y-bv;
+}
+void teleportness(
+  ) {
+  if (rx<0) {
+    rx =500;
+    upperPipeHeight = (int) random(100, 400);
+    score =score+1;
+  }
+  if (rtx<0) {
+    rtx =500;
+    lowerY = upperPipeHeight+pipegap;
+    score =score+1;
+  }
+}
+
+boolean die() {
+  if (y<0||y>750) {
+
+    return true;
+  }
+  return false;
+}
+boolean intersectsPipes() { 
+  if (y < upperPipeHeight && x > rx && x < (rx+pw)) {
+    return true;
+  } else if (y>lowerY && x > rtx && x < (rtx+pw)) {
+    return true;
+  } else { 
+    return false;
+  }
 }
