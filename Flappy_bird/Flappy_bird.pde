@@ -5,10 +5,14 @@ int bg = 3;
 int rx =300;
 int pw = 50 ;
 int upperPipeHeight = (int) random(100, 400);
-int pipegap= 250;
+int pipegap= 75;
 int rtx= 450;
 int lowerY = upperPipeHeight + pipegap;
 int score = 0;
+int topipeY =  (int)random(-200,0) ;
+int pipeheight = 400; 
+int bottompipeY = topipeY + pipeheight+ pipegap ;
+
 PImage back;
 PImage pipeBottom;
 PImage pipeTop;
@@ -24,12 +28,12 @@ void draw() {
   image( bird, x, y);
   y= y+bg;
   fill(#1F7E0A);
-  image (pipeTop,rx,0);
+  image (pipeTop,rx,topipeY);
 
   rx=rx-5;
   teleportness();
 
-  image(pipeBottom,rtx, lowerY );
+  image(pipeBottom,rtx, bottompipeY );
 
   rtx=rtx-5;
   teleportness();
@@ -64,12 +68,12 @@ void teleportness(
   ) {
   if (rx<0) {
     rx =500;
-    upperPipeHeight = (int) random(100, 400);
+    topipeY = (int) random(-200, 0);
     score =score+1;
   }
   if (rtx<0) {
     rtx =500;
-    lowerY = upperPipeHeight+pipegap;
+   bottompipeY = topipeY + pipeheight+ pipegap ;;
     score =score+1;
   }
 }
@@ -82,9 +86,9 @@ boolean die() {
   return false;
 }
 boolean intersectsPipes() { 
-  if (y < upperPipeHeight && x > rx && x < (rx+pw)) {
+  if (y < topipeY + pipeheight && x > rx && x < (rx+pw)) {
     return true;
-  } else if (y>lowerY && x > rtx && x < (rtx+pw)) {
+  } else if (y> bottompipeY- 40 && x > rtx && x < (rtx+pw)) {
     return true;
   } else { 
     return false;
